@@ -6,8 +6,8 @@ from typing import Dict, Type
 
 
 PAGE_MAP: Dict[str, Type[Page]] = {
-    "Page 1": Page1,
-    "Page 2": Page2,
+    "Salary distribution": Page1,
+    "Scatter plot of stats": Page2,
 }
 
 __all__ = ["PAGE_MAP"]
