@@ -4,6 +4,7 @@ from streamlit.server.server import Server
 import streamlit as st
 from typing import Dict, Any
 from copy import deepcopy
+import pickle
 
 
 class _SessionState:
@@ -84,13 +85,20 @@ def get_state(hash_funcs=None):
 # Only used for separating namespace, everything can be saved at state variable as well.
 CONFIG_DEFAULTS: Dict[str, Any] = {"slider_value": 0}
 
+def load_data(url='/usr/app/df_merge_nonan.pickle'):
+# def load_data(url='/Users/usamiippei/workspace/demo-streamlit-heroku/data/df_merge_nonan.pickle'):
+        with open(url, 'rb') as fp:
+            df = pickle.load(fp)
+        return df
+
 def provide_state(hash_funcs=None):
     def inner(func):
         def wrapper(*args, **kwargs):
             state = get_state(hash_funcs=hash_funcs)
             if state.client_config is None:
                 state.client_config = deepcopy(CONFIG_DEFAULTS)
-
+            if state.data is None:
+                state.data = load_data()
             return_value = func(state=state, *args, **kwargs)
             state.sync()
             return return_value
